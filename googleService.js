@@ -33,7 +33,7 @@ const googleService = {
                 }
 
                 const fileName = 'Результаты.csv';
-                const dirPath = `./public/${username}_${new Date().getTime()}`;
+                const dirPath = `./public/${new Date().getTime()}`;
                 const outputPath = `${dirPath}/${fileName}`;
 
                 try {
