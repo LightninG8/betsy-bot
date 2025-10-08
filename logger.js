@@ -1,18 +1,23 @@
-import log4js from "log4js";
+import log4js from 'log4js';
 
 log4js.configure({
     appenders: {
-        console: {type: 'console'},
+        console: { type: 'console' },
         file: {
-            type: 'multiFile', base: 'logs/', property: 'categoryName', extension: '.log', maxLogSize: 1024*5, backup: 5
-        }
+            type: 'multiFile',
+            base: 'logs/',
+            property: 'categoryName',
+            extension: '.log',
+            maxLogSize: 1024 * 5,
+            backup: 5,
+        },
     },
     categories: {
         default: {
-            appenders: ['console', 'file'], 
+            appenders: ['console', 'file'],
             level: 'trace',
         },
-    }
+    },
 });
 
 const logger = log4js.getLogger('app');
