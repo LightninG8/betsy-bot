@@ -6,6 +6,7 @@ import log4js from 'log4js';
 import salebotService from './salebotService.js';
 import logger from './logger.js';
 import databaseService from './databaseService.js';
+import googleService from './googleService.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
