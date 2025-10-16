@@ -119,7 +119,7 @@ app.post('/healthcheck', async (req, res) => {
   }
 });
 
-const port = process.env.PORT || 3003;
+const port = process.env.PORT || 80;
 
 app.listen(port, () => {
   logger.log(`🚀 Приложение запущено at http://localhost:${port}/`);
