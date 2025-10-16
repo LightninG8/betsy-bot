@@ -1,44 +1,45 @@
-import axios from 'axios';
-import 'dotenv';
+import '../utils/env';
+
+import axios from "axios";
 
 const salebotService = {
-  sendParsingSuccessWebhook(clientId, sheetUrl, count) {
+  sendParsingSuccessWebhook(clientId: number, sheetUrl: string, count: number) {
     return axios.post(
       `https://chatter.salebot.pro/api/${process.env.SALEBOT_API_KEY}/callback`,
       {
         client_id: clientId,
-        message: 'parsing_ended',
-        sheetUrl: sheetUrl,
+        sheetUrl,
+        message: "parsing_ended",
         count
       }
     );
   },
-  sendParsingErrorWebhook(clientId) {
+  sendParsingErrorWebhook(clientId: number) {
     return axios.post(
       `https://chatter.salebot.pro/api/${process.env.SALEBOT_API_KEY}/callback`,
       {
         client_id: clientId,
-        message: 'parsing_error',
+        message: "parsing_error",
       }
     );
   },
 
-  sendServerErrorWebhook(clientId) {
+  sendServerErrorWebhook(clientId: number) {
     return axios.post(
       `https://chatter.salebot.pro/api/${process.env.SALEBOT_API_KEY}/callback`,
       {
         client_id: clientId,
-        message: 'server_error',
+        message: "server_error",
       }
     );
   },
 
-  sendSaveDatasetWebhook(clientId, dataset) {
+  sendSaveDatasetWebhook(clientId: number, dataset: string) {
     return axios.post(
       `https://chatter.salebot.pro/api/${process.env.SALEBOT_API_KEY}/callback`,
       {
         client_id: clientId,
-        message: 'save_dataset',
+        message: "save_dataset",
         datset: dataset,
       }
     );
@@ -48,18 +49,18 @@ const salebotService = {
     return axios.post(
       `https://chatter.salebot.pro/api/${process.env.SALEBOT_API_KEY}/callback`,
       {
-        client_id: 811546739,
-        message: 'no_tokens',
+        client_id: 815499824,
+        message: "no_tokens",
       }
     );
   },
 
-  sendKeysHealtcheckWebhook(clientId, allBalance, allActiveKeys) {
+  sendKeysHealtcheckWebhook(clientId: number, allBalance: number, allActiveKeys: number) {
     return axios.post(
       `https://chatter.salebot.pro/api/${process.env.SALEBOT_API_KEY}/callback`,
       {
         client_id: clientId,
-        message: 'keys_healtcheck',
+        message: "keys_healtcheck",
         allBalance,
         allActiveKeys
       }
