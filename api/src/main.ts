@@ -9,23 +9,13 @@ import databaseService from './services/databaseService';
 import { apifyService, Platform } from './services';
 import sheetService from './services/sheetService';
 import salebotService from './services/salebotService';
-import fs from 'fs';
 
 const app = express();
 
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(log4js.connectLogger(logger, { level: 'info' }));
 
-const publicPath = path.join(__dirname, 'public');
-
-// ✅ Проверяем — если нет папки, создаём
-if (!fs.existsSync(publicPath)) {
-  fs.mkdirSync(publicPath, { recursive: true });
-  console.log(`📁 Папка 'public' создана по пути: ${publicPath}`);
-}
-
-// Подключаем как static
-app.use('/public', express.static(publicPath));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.post('/parse', validateLinks, (req, res) => {
   try {
