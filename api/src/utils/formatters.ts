@@ -41,14 +41,14 @@ function normalize(platform: Platform, item: Record<string, any>) {
     date: item.timestamp || item.date || item.createTimeISO || null,
     videoTitle: item.caption || item.title || item.text || null,
     previewUrl: item.displayUrl || item.thumbnailUrl || item.videoMeta?.coverUrl || null,
-    url: item.url || item.videoUrl || null,
-    views: parseNumber(item.videoViewCount || item.viewCount || item.videoMeta?.playCount),
-    likes: parseNumber(item.likesCount || item.likes || item.videoMeta?.playCount),
-    shares: parseNumber(item.sharesCount || item.shares || item.videoMeta?.shareCount),
-    comments: parseNumber(item.videoViewCount || item.commentsCount || item.videoMeta?.commentCount),
+    url: item.url || item.videoUrl || item.webVideoUrl || null,
+    views: parseNumber(item.videoViewCount || item.viewCount || item.playCount),
+    likes: parseNumber(item.likesCount || item.likes || item.playCount),
+    shares: parseNumber(item.sharesCount || item.shares || item.shareCount),
+    comments: parseNumber(item.commentsCount || item.commentCount),
     musicTitle: item.musicInfo?.song_name || item.musicMeta?.musicName || null,
     musicAuthor: item.musicInfo?.artist_name || item.musicMeta?.musicAuthor || null,
-    duration: item.videoDuration || parseNumber(item.duration) ||item.videoMeta?.duration || null,
+    duration: item.videoDuration || parseNumber(item.duration) || item.videoMeta?.duration || null,
   };
 }
 

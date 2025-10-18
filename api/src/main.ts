@@ -17,7 +17,7 @@ app.use(log4js.connectLogger(logger, { level: 'info' }));
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-app.post('/parse', validateLinks, (req, res) => {
+app.post('/parse', validateLinks, async (req, res) => {
   try {
     const links = req.body['links'];
     const clientId = req.body['clientId'];
@@ -86,12 +86,15 @@ app.post('/parse', validateLinks, (req, res) => {
         sheetUrl,
         formattedResults.length
       );
+
+      return formattedResults;
     };
 
-    flow();
+    // await flow();
 
     // Возвращаем ответ
-    return res.sendStatus(200);
+    // return res.sendStatus(200);
+    return res.send(await flow());
   } catch (err) {
     // Глобальная ошибка, если что-то пошло не так
     logger.error(`🚨 Ошибка при обработке /parse`, err);

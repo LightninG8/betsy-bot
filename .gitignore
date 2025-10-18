@@ -5,7 +5,6 @@ dist
 tmp
 out-tsc
 /api/src/public/*
-!/api/src/public/test.txt
 
 /api/dist
 /logs

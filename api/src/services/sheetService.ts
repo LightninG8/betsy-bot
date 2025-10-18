@@ -36,7 +36,7 @@ const sheetService = {
           el.shares,
           el.comments,
           el.duration,
-          el.musicTitle + " - " + el.musicTitle,
+          el.musicTitle? el.musicTitle + " - " + el.musicTitle : "",
           el.profile,
           el.profileName,
           el.videoTitle,
