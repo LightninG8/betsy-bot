@@ -92,9 +92,8 @@ app.post('/parse', validateLinks, async (req, res) => {
       return sheetUrl;
     };
 
-    const sheetUrl = await flow();
 
-    return res.send(sheetUrl);
+    return res.sendStatus(200);
   } catch (err) {
     logger.error(`🚨 Ошибка при обработке /parse`, err);
 
