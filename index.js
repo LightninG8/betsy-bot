@@ -25,13 +25,13 @@ app.post('/parse', validateLinks, async (req, res) => {
     try {
         let links = req.body['links'];
         const clientId = req.body['clientId'];
-        
+
         if (typeof links === 'string') {
           links = JSON.parse(links);
         }
 
         if (!Array.isArray(links) || links.length === 0) {
-            return res.status(400).json({ message: "Поле 'links' должно быть непустым массивом." });
+            return res.status(400).json({ message: "Поле 'links' должно быть непустым массивом.", links });
         }
 
         if (!clientId) {
