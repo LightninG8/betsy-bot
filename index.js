@@ -21,7 +21,7 @@ app.use(log4js.connectLogger(logger, { level: 'info' }));
 app.use('/public', express.static(path.join(path.dirname(import.meta.url.replace('file://', '')), 'public')));
 
 // Основной маршрут парсинга
-app.post('/parse', validateLinks, async (req, res) => {
+app.post('/parse', async (req, res) => {
     try {
         let links = req.body['links'];
         const clientId = req.body['clientId'];
