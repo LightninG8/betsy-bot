@@ -1,5 +1,3 @@
-import express from 'express';
-
 // --- Регулярки для каждой платформы ---
 const REGEX = {
   instagram: /instagram\.com\/(?:reel|reels)\//i,
@@ -8,17 +6,19 @@ const REGEX = {
 };
 
 // --- Проверка одной ссылки ---
-export function isValidInstagramLink(link: string): boolean {
+export function isValidInstagramLink(link) {
   return REGEX.instagram.test(link);
 }
-export function isValidYouTubeLink(link: string): boolean {
+
+export function isValidYouTubeLink(link) {
   return REGEX.youtube.test(link);
 }
-export function isValidTikTokLink(link: string): boolean {
+
+export function isValidTikTokLink(link) {
   return REGEX.tiktok.test(link);
 }
 
-export function isValidLink(link: string): boolean {
+export function isValidLink(link) {
   return (
     isValidInstagramLink(link) ||
     isValidYouTubeLink(link) ||
@@ -27,11 +27,7 @@ export function isValidLink(link: string): boolean {
 }
 
 // --- Middleware для валидации links ---
-export function validateLinks(
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-) {
+export function validateLinks(req, res, next) {
   const { links } = req.body;
 
   if (!Array.isArray(links) || links.length === 0) {

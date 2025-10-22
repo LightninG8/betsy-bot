@@ -1,22 +1,26 @@
-import './utils/env';
+// utils/env.js — просто импорт, чтобы загрузить переменные окружения
+import "dotenv/config";
 
 import bodyParser from 'body-parser';
 import express from 'express';
-import * as path from 'path';
+import path from 'path';
 import log4js from 'log4js';
-import { formatResults, logger, validateLinks } from './utils';
-import databaseService from './services/databaseService';
-import { apifyService, Platform } from './services';
-import sheetService from './services/sheetService';
-import salebotService from './services/salebotService';
+
+import { formatResults, logger, validateLinks } from './utils/index.js';
+import databaseService from './services/databaseService.js';
+import { apifyService, Platform } from './services/index.js';
+import sheetService from './services/sheetService.js';
+import salebotService from './services/salebotService.js';
 
 const app = express();
 
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(log4js.connectLogger(logger, { level: 'info' }));
 
-app.use('/public', express.static(path.join(__dirname, 'public')));
+// Раздача статики
+app.use('/public', express.static(path.join(path.dirname(import.meta.url.replace('file://', '')), 'public')));
 
+// Основной маршрут парсинга
 app.post('/parse', validateLinks, async (req, res) => {
   try {
     const links = req.body['links'];
@@ -35,12 +39,12 @@ app.post('/parse', validateLinks, async (req, res) => {
     // Разделяем ссылки по платформам
     const grouped = apifyService.splitLinksByPlatform(links);
 
-    // Собираем задачи
+    // Собираем задачи для каждой платформы
     const tasks = Object.keys(grouped)
       .filter((p) => grouped[p].length > 0)
       .map((p) =>
         apifyService.processPlatform({
-          platform: p as Platform,
+          platform: p,
           links: grouped[p],
           clientId,
         })
@@ -77,9 +81,7 @@ app.post('/parse', validateLinks, async (req, res) => {
         formatResults(result.platform, result.items)
       );
 
-      const sheetUrl = (await sheetService.createCSVSheet(
-        formattedResults
-      )) as string;
+      const sheetUrl = await sheetService.createCSVSheet(formattedResults);
 
       await salebotService.sendParsingSuccessWebhook(
         clientId,
@@ -87,16 +89,13 @@ app.post('/parse', validateLinks, async (req, res) => {
         formattedResults.length
       );
 
-      return formattedResults;
+      return sheetUrl;
     };
 
-    // await flow();
+    const sheetUrl = await flow();
 
-    // Возвращаем ответ
-    // return res.sendStatus(200);
-    return res.send(await flow());
+    return res.send(sheetUrl);
   } catch (err) {
-    // Глобальная ошибка, если что-то пошло не так
     logger.error(`🚨 Ошибка при обработке /parse`, err);
 
     return res.status(500).json({
@@ -106,6 +105,7 @@ app.post('/parse', validateLinks, async (req, res) => {
   }
 });
 
+// Проверка состояния API
 app.post('/healthcheck', async (req, res) => {
   try {
     const { allBalance, allActiveKeys } =
@@ -117,14 +117,12 @@ app.post('/healthcheck', async (req, res) => {
     });
   } catch (e) {
     logger.error('Ошибка проверки ключей ', e);
-
     res.sendStatus(401);
   }
 });
 
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-  logger.log(`🚀 Приложение запущено at http://localhost:${port}/`);
+  logger.info(`🚀 Приложение запущено at http://localhost:${port}/`);
 });
-// server.on('error', logger.error);

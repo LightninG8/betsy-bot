@@ -1,9 +1,9 @@
-import '../utils/env';
+import "dotenv/config";
 
 import axios from "axios";
 
 const salebotService = {
-  sendParsingSuccessWebhook(clientId: number, sheetUrl: string, count: number) {
+  sendParsingSuccessWebhook(clientId, sheetUrl, count) {
     return axios.post(
       `https://chatter.salebot.pro/api/${process.env.SALEBOT_API_KEY}/callback`,
       {
@@ -14,7 +14,7 @@ const salebotService = {
       }
     );
   },
-  sendParsingErrorWebhook(clientId: number) {
+  sendParsingErrorWebhook(clientId) {
     return axios.post(
       `https://chatter.salebot.pro/api/${process.env.SALEBOT_API_KEY}/callback`,
       {
@@ -24,7 +24,7 @@ const salebotService = {
     );
   },
 
-  sendServerErrorWebhook(clientId: number) {
+  sendServerErrorWebhook(clientId) {
     return axios.post(
       `https://chatter.salebot.pro/api/${process.env.SALEBOT_API_KEY}/callback`,
       {
@@ -34,7 +34,7 @@ const salebotService = {
     );
   },
 
-  sendSaveDatasetWebhook(clientId: number, dataset: string) {
+  sendSaveDatasetWebhook(clientId, dataset) {
     return axios.post(
       `https://chatter.salebot.pro/api/${process.env.SALEBOT_API_KEY}/callback`,
       {
@@ -55,7 +55,7 @@ const salebotService = {
     );
   },
 
-  sendKeysHealtcheckWebhook(clientId: number, allBalance: number, allActiveKeys: number) {
+  sendKeysHealtcheckWebhook(clientId, allBalance, allActiveKeys) {
     return axios.post(
       `https://chatter.salebot.pro/api/${process.env.SALEBOT_API_KEY}/callback`,
       {

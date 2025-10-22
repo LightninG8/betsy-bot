@@ -9,6 +9,6 @@ build:
     '*': /
 run:
   scriptName: index.js
-  command: npx nx run api:serve
+  command: npm run start
   persistenceMount: /data
-  containerPort: 80
+  containerPort: 3000

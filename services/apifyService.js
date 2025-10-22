@@ -4,15 +4,15 @@ import {
   isValidTikTokLink,
   isValidYouTubeLink,
   logger,
-} from '../utils';
-import databaseService from './databaseService';
+} from '../utils/index.js';
+import databaseService from './databaseService.js';
 
 // === Конфигурация для каждой платформы ===
 const platforms = {
   instagram: {
     actor: 'apify/instagram-reel-scraper',
     label: 'Instagram',
-    configureInput: (links: string[]) => ({
+    configureInput: (links) => ({
       includeSharesCount: true,
       resultsLimit: 10000,
       username: links,
@@ -21,7 +21,7 @@ const platforms = {
   youtube: {
     actor: 'streamers/youtube-shorts-scraper',
     label: 'YouTube',
-    configureInput: (links: string[]) => ({
+    configureInput: (links) => ({
       maxResultsShorts: 1000,
       channels: links,
     }),
@@ -29,7 +29,7 @@ const platforms = {
   tiktok: {
     actor: 'clockworks/tiktok-video-scraper',
     label: 'TikTok',
-    configureInput: (links: string[]) => ({
+    configureInput: (links) => ({
       postURLs: links,
       resultsPerPage: 100,
       scrapeRelatedVideos: false,
@@ -39,32 +39,21 @@ const platforms = {
       shouldDownloadVideos: false,
     }),
   },
-} as const;
+};
 
-// === Тип платформы автоматически формируется по ключам объекта ===
-export type Platform = keyof typeof platforms;
+// === Тип платформы (в JS просто строка из набора ключей) ===
+export const Platform = Object.freeze(Object.keys(platforms));
 
-// Создаём клиента Apify
+// === Сервис Apify ===
 export const apifyService = {
-  // === Универсальная асинхронная функция обработки одной платформы ===
-  async processPlatform({
-    platform,
-    links,
-    clientId,
-    retry = false,
-  }: {
-    platform: Platform;
-    links: string[];
-    clientId: number;
-    retry?: boolean;
-  }): Promise<{ platform: Platform; items: object[] }> {
+  // === Универсальная функция обработки одной платформы ===
+  async processPlatform({ platform, links, clientId, retry = false }) {
     const { actor, label, configureInput } = platforms[platform];
 
     const task = async () => {
       // 1️⃣ Получаем ключ Apify
       const token = await databaseService.checkAndSelectKey();
       if (!token) {
-        // salebotService.sendNoTokensMessage();
         throw new Error('Отсутствуют доступные Apify ключи');
       }
 
@@ -89,10 +78,10 @@ export const apifyService = {
 
         // 5️⃣ Получаем результаты
         const dataset = await client.dataset(run.defaultDatasetId).listItems();
-        const items: object[] = dataset.items;
+        const items = dataset.items;
 
-        logger.log(
-          `✅ Окончен парсинг ${label} (${links.length} ссылок) для ${clientId} для ${clientId}`
+        logger.info(
+          `✅ Окончен парсинг ${label} (${links.length} ссылок) для ${clientId}`
         );
 
         return { platform, items };
@@ -131,7 +120,6 @@ export const apifyService = {
           }
         }
 
-        // 💥 Пробрасываем ошибку дальше
         throw new Error(`Ошибка ${label}: ${message}`);
       }
     };
@@ -140,8 +128,8 @@ export const apifyService = {
   },
 
   // === Разделение ссылок по платформам ===
-  splitLinksByPlatform(links: string[]) {
-    const grouped: Record<string, string[]> = {
+  splitLinksByPlatform(links) {
+    const grouped = {
       instagram: [],
       youtube: [],
       tiktok: [],
