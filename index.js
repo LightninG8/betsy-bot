@@ -31,8 +31,7 @@ app.post('/parse', async (req, res) => {
         }
 
         if (!Array.isArray(links) || links.length === 0) {
-          logger.log(links);
-            return res.status(400).json({ message: "Поле 'links' должно быть непустым массивом.", links });
+            return res.status(400).json({ message: "Поле 'links' должно быть непустым массивом." });
         }
 
         if (!clientId) {
