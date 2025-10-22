@@ -67,7 +67,7 @@ const sheetService = {
           fs.writeFileSync(outputPath, output, 'utf8');
           logger.info(`CSV-файл успешно создан: ${outputPath}`);
 
-          const sheetUrl = `${process.env.NODE_ENV == "production" ? process.env.SERVER_URL : `http://localhost:${process.env.PORT}`}/${outputPath.replace(
+          const sheetUrl = `${process.env.SERVER_URL}/${outputPath.replace(
             './',
             ''
           )}`;
