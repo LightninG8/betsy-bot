@@ -23,8 +23,12 @@ app.use('/public', express.static(path.join(path.dirname(import.meta.url.replace
 // Основной маршрут парсинга
 app.post('/parse', validateLinks, async (req, res) => {
     try {
-        const links = req.body['links'];
+        let links = req.body['links'];
         const clientId = req.body['clientId'];
+        
+        if (typeof links === 'string') {
+          links = JSON.parse(links);
+        }
 
         if (!Array.isArray(links) || links.length === 0) {
             return res.status(400).json({ message: "Поле 'links' должно быть непустым массивом." });
