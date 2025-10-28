@@ -33,7 +33,7 @@ function normalize(platform, item) {
       null,
     url: item.url || item.videoUrl || item.webVideoUrl || null,
     views: parseNumber(
-      item.videoViewCount || item.viewCount || item.playCount
+      item.videoPlayCount || item.viewCount || item.playCount
     ),
     likes: parseNumber(item.likesCount || item.likes || item.playCount),
     shares: parseNumber(item.sharesCount || item.shares || item.shareCount),
