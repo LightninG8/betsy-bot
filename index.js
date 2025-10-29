@@ -73,7 +73,7 @@ app.post('/parse', async (req, res) => {
             if (rejected.length > 0) logger.error(`❌ Ошибок при выполнении акторов: ${rejected.length}`);
 
             const formattedResults = fulfilled.flatMap((result) => formatResults(result.platform, result.items));
-            const sortedResults = sortResultsByInputOrder(links, formatResults);
+            const sortedResults = sortResultsByInputOrder(links, formattedResults);
 
             const sheetUrl = await sheetService.createCSVSheet(sortedResults);
 
