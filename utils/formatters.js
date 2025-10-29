@@ -35,7 +35,7 @@ function normalize(platform, item) {
     views: parseNumber(
       item.videoPlayCount || item.viewCount || item.playCount
     ),
-    likes: parseNumber(item.likesCount || item.likes || item.playCount),
+    likes: parseNumber(item.likesCount || item.likes || item.diggCount),
     shares: parseNumber(item.sharesCount || item.shares || item.shareCount),
     comments: parseNumber(item.commentsCount || item.commentCount),
     musicTitle:
