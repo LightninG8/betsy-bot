@@ -74,3 +74,26 @@ export function formatDate(isoString) {
 
   return `${day}.${month}.${year} ${hours}:${minutes}`;
 }
+
+
+
+export function sortResultsByInputOrder(inputLinks, results) {
+  // Создаём карту: ключ = "чистая ссылка" (без query-параметров)
+  const linkOrder = new Map();
+  inputLinks.forEach((link, index) => {
+    // Удаляем query-параметры для надёжного сравнения
+    const clean = link.split('?')[0];
+    linkOrder.set(clean, index);
+  });
+
+  // Сортируем результаты в том же порядке
+  return results.sort((a, b) => {
+    const linkA = a.url.split('?')[0];
+    const linkB = b.url.split('?')[0];
+
+    const orderA = linkOrder.get(linkA) ?? Number.MAX_SAFE_INTEGER;
+    const orderB = linkOrder.get(linkB) ?? Number.MAX_SAFE_INTEGER;
+
+    return orderA - orderB;
+  });
+}

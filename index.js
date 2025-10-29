@@ -6,7 +6,7 @@ import express from 'express';
 import path from 'path';
 import log4js from 'log4js';
 
-import { formatResults, logger, validateLinks } from './utils/index.js';
+import { formatResults, logger, sortResultsByInputOrder, validateLinks } from './utils/index.js';
 import databaseService from './services/databaseService.js';
 import { apifyService, Platform } from './services/index.js';
 import sheetService from './services/sheetService.js';
@@ -73,8 +73,9 @@ app.post('/parse', async (req, res) => {
             if (rejected.length > 0) logger.error(`❌ Ошибок при выполнении акторов: ${rejected.length}`);
 
             const formattedResults = fulfilled.flatMap((result) => formatResults(result.platform, result.items));
+            const sortedResults = sortResultsByInputOrder(links, formatResults);
 
-            const sheetUrl = await sheetService.createCSVSheet(formattedResults);
+            const sheetUrl = await sheetService.createCSVSheet(sortedResults);
 
             await salebotService.sendParsingSuccessWebhook(clientId, sheetUrl, formattedResults.length);
 
