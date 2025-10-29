@@ -77,7 +77,7 @@ app.post('/parse', async (req, res) => {
 
             const sheetUrl = await sheetService.createCSVSheet(sortedResults);
 
-            await salebotService.sendParsingSuccessWebhook(clientId, sheetUrl, formattedResults.length);
+            await salebotService.sendParsingSuccessWebhook(clientId, sheetUrl, sortedResults.length);
 
             return sheetUrl;
         };

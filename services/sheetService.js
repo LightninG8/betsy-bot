@@ -27,9 +27,6 @@ const sheetService = {
     const values = [
       labels,
       ...items
-        .sort(
-          (a, b) => (b.views ?? 0) - (a.views ?? 0)
-        )
         .map((el, i) => [
           i + 1,
           el.platform,
